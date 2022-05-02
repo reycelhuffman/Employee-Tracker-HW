@@ -1,9 +1,11 @@
 const { prompt } = require("inquirer");
+const express  = require('express');
 const mysql = require('mysql2/promise');
-let employeES_db;
+const
+let db;
 
 const PORT = process.env.PORT || 3001;
-const app = express();
+// const app = express();
 
 awaitMySqlWithInquirer();
 
@@ -13,7 +15,7 @@ async function init() {
             host: 'localhost',
             user: 'root',
             password: 'root',
-            database: 'employees'
+            database: 'employees_db'
         },
         console.log(`Connected to the employees_db database.`)
     );

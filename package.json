@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/reycelhuffman/Employee-Tracker-HW#readme",
   "dependencies": {
-    "inquirer": "^8.2.4"
+    "express": "^4.18.1",
+    "inquirer": "^8.2.4",
+    "mysql2": "^2.3.3"
   }
 }
