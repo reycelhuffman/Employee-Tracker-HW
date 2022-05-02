@@ -1,6 +1,6 @@
 const { prompt } = require("inquirer");
 const mysql = require('mysql2/promise');
-let db;
+let employeedb;
   
 awaitMySqlWithInquirer();
 
