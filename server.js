@@ -1,8 +1,8 @@
 const { prompt } = require("inquirer");
 const express  = require('express');
 const mysql = require('mysql2/promise');
-const
-let db;
+
+// let db
 
 const PORT = process.env.PORT || 3001;
 // const app = express();
@@ -29,15 +29,46 @@ async function awaitMySqlWithInquirer() {
 
     console.table(employees);
 
-    const { employee } = await prompt([{
+    const { employee } = await prompt([
+        {
         type: 'list',
         name: 'employee',
         message: 'What employee do you want to talk to?',
-        choices: employees.map(employee => ({ name: employee.first_name + " " + employee.last_name, value: employee }))
+        choices: employees.map(employee => ({ name: employee.first_name + " " + employee.last_name, value: employee 
+        }, 
+        {
+            type: 'list',
+            name: 'employee',
+            message: 'What would you like to do?'
+            choices: employees.map(employee => ({add: employee}))
+        },
+        {
+            type: 'input',
+            name: 'employee',
+            message: 'What is the employees first name?'
+        },
+        {
+            type: 'input',
+            name: 'employee',
+            message: 'What is the employees last name?'
+        },
+        {
+            type: 'input',
+            name: 'employee',
+            message: 'What is the employees role?'
+        },
+        {
+            type: 'input',
+            name: 'employee',
+            message: 'Who is the employees manager?'
+        }
+
+        ))
     }])
 
     console.log(employee)
 
+    
 
     /// write next sql statements here! you would do some sort of sql query after this
 
