@@ -29,23 +29,35 @@ async function awaitMySqlWithInquirer() {
    
 
 
-    const { employee } = await prompt([
+    await prompt([
         {
         type: 'list',
-        name: 'employee',
+        name: 'questions',
         message: 'What would you like to do?',
-        choices: ["View all departments", "View all roles", "Add a department", "Add a role", "Add an employee", "Update an employee role"]
+        choices: ["View all departments", "View all roles", "View all employees", "Add a department", "Add a role", "Add an employee", "Update an employee role"]
         },
-
     ])
-
+    .then (function(response) {
+        if (response.questions === "View all departments") {
+        console.table(department);
+        return awaitMySqlWithInquirer();
+    }
+        else if (response.questions === "View all roles") {
+            console.table(role);
+            return awaitMySqlWithInquirer();
+    }
+    else if (response.questions === "View all employees") {
+        console.table(employees);
+        return awaitMySqlWithInquirer();
+    }
     // console.log(employee)
-    console.table(employees);
-    console.table(role);
-    console.table(department);
+    // console.table(employees);
+    // console.table(role);
+   
 
     /// write next sql statements here! you would do some sort of sql query after this
 
+    })
 }
 
 
