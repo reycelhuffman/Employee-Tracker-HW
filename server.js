@@ -50,10 +50,27 @@ async function awaitMySqlWithInquirer() {
         console.table(employees);
         return awaitMySqlWithInquirer();
     }
+    else if (response.questions === "Add a department") {
+        addDepartment();
+        
+    }
+    else if (response.questions === "Add a role") {
+        addRole();
+    
+    }
+    else if (response.questions === "Add an employee") {
+        addEmployees();
+        
+    }
+    else if (response.questions === "Update an employee role") {
+        updateRole(), updateEmployees();
+    
+    }
+    
     // console.log(employee)
     // console.table(employees);
     // console.table(role);
-   
+
 
     /// write next sql statements here! you would do some sort of sql query after this
 
