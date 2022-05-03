@@ -1,11 +1,7 @@
 const { prompt } = require("inquirer");
-const express  = require('express');
 const mysql = require('mysql2/promise');
+let db;
 
-// let db
-
-const PORT = process.env.PORT || 3001;
-// const app = express();
 
 awaitMySqlWithInquirer();
 
@@ -22,53 +18,31 @@ async function init() {
 
 
 }
+
 async function awaitMySqlWithInquirer() {
     await init()
 
-    const [employees] = await db.execute("select * from employee")
+    const [employees] = await db.execute("select * from employee"); 
+    const [role] = await db.execute("select * from employee_role");
+    const [department] = await db.execute("select * from department");
 
-    console.table(employees);
+   
+
 
     const { employee } = await prompt([
         {
         type: 'list',
         name: 'employee',
-        message: 'What employee do you want to talk to?',
-        choices: employees.map(employee => ({ name: employee.first_name + " " + employee.last_name, value: employee 
-        }, 
-        {
-            type: 'list',
-            name: 'employee',
-            message: 'What would you like to do?'
-            choices: employees.map(employee => ({add: employee}))
+        message: 'What would you like to do?',
+        choices: ["View all departments", "View all roles", "Add a department", "Add a role", "Add an employee", "Update an employee role"]
         },
-        {
-            type: 'input',
-            name: 'employee',
-            message: 'What is the employees first name?'
-        },
-        {
-            type: 'input',
-            name: 'employee',
-            message: 'What is the employees last name?'
-        },
-        {
-            type: 'input',
-            name: 'employee',
-            message: 'What is the employees role?'
-        },
-        {
-            type: 'input',
-            name: 'employee',
-            message: 'Who is the employees manager?'
-        }
 
-        ))
-    }])
+    ])
 
-    console.log(employee)
-
-    
+    // console.log(employee)
+    console.table(employees);
+    console.table(role);
+    console.table(department);
 
     /// write next sql statements here! you would do some sort of sql query after this
 
@@ -77,18 +51,18 @@ async function awaitMySqlWithInquirer() {
 
 
 
-async function awaitWithInquirerByItself() {
+// async function awaitWithInquirerByItself() {
 
 
-    const { size } = await prompt([{
-        type: 'list',
-        name: 'size',
-        message: 'What size do you need?',
-        choices: ['Jumbo', 'Large', 'Standard', 'Medium', 'Small', 'Micro']
-    }])
+//     const { size } = await prompt([{
+//         type: 'list',
+//         name: 'size',
+//         message: 'What size do you need?',
+//         choices: ['Jumbo', 'Large', 'Standard', 'Medium', 'Small', 'Micro']
+//     }])
 
-    console.log(size);
+//     console.log(size);
 
-}
+// }
 
-
+// employees.map(employee => ({ name: employee.first_name + " " + employee.last_name, value: employee }))
