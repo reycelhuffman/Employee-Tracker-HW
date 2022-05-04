@@ -52,19 +52,15 @@ async function awaitMySqlWithInquirer() {
                 return awaitMySqlWithInquirer();
             }
             else if (response.questions === "Add a department") {
-                console.table(department);
                 return addDepartment();
             }
             else if (response.questions === "Add a role") {
-                console.table(role);
                 return addRole();
             }
             else if (response.questions === "Add an employee") {
-                // console.table(employees);
                 return addEmployees();
             }
             else if (response.questions === "Update an employee role") {
-                console.table(employees);
                 return updateEmployeeRole();
             }
             else console.log("You can exit if you're done")
@@ -114,6 +110,31 @@ db.execute(`INSERT INTO employee (first_name, last_name, role_id, manager_id)
 
 
 }
+
+async function addDepartment() {
+    await init()
+
+    const [department] = await db.execute("select * from department");
+
+
+    console.table(department);
+
+    const response = await prompt([
+        {
+        type: 'input',
+        name: 'departmentName',
+        message: 'What is the new department name?',
+        },
+])
+db.execute(`INSERT INTO department (name)
+            VALUES  ("${response.departmentName}");`)
+            const [newDepartmentTable] = await db.execute("select * from department")
+            console.log("New Department Added!! Yah!")
+            console.table(newDepartmentTable) 
+            awaitMySqlWithInquirer()       
+}
+
+
 
 
 
