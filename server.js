@@ -22,51 +22,75 @@ async function init() {
 async function awaitMySqlWithInquirer() {
     await init()
 
-    const [employees] = await db.execute("select * from employee"); 
+    const [employees] = await db.execute("select * from employee");
     const [role] = await db.execute("select * from employee_role");
     const [department] = await db.execute("select * from department");
 
-   
+
 
 
     await prompt([
         {
-        type: 'list',
-        name: 'questions',
-        message: 'What would you like to do?',
-        choices: ["View all departments", "View all roles", "View all employees", "Add a department", "Add a role", "Add an employee", "Update an employee role"]
+            type: 'list',
+            name: 'questions',
+            message: 'What would you like to do?',
+            choices: ["View all departments", "View all roles", "View all employees", "Add a department", "Add a role", "Add an employee", "Update an employee role"]
         },
     ])
-    .then (function(response) {
-        if (response.questions === "View all departments") {
-        console.table(department);
-        return awaitMySqlWithInquirer();
-    }
-        else if (response.questions === "View all roles") {
-            console.table(role);
-            return awaitMySqlWithInquirer();
-    }
-    else if (response.questions === "View all employees") {
-        console.table(employees);
-        return awaitMySqlWithInquirer();
-    }
-    else if (response.questions === "Add a department") {
-        addDepartment();
-        
-    }
-    else if (response.questions === "Add a role") {
-        addRole();
-    
-    }
-    else if (response.questions === "Add an employee") {
-        addEmployees();
-        
-    }
-    else if (response.questions === "Update an employee role") {
-        updateRole(), updateEmployees();
-    
-    }
-    
+        .then(function (response) {
+            if (response.questions === "View all departments") {
+                console.table(department);
+                return awaitMySqlWithInquirer();
+            }
+            else if (response.questions === "View all roles") {
+                console.table(role);
+                return awaitMySqlWithInquirer();
+            }
+            else if (response.questions === "View all employees") {
+                console.table(employees);
+                return awaitMySqlWithInquirer();
+            }
+            else if (response.questions === "Add a department") {
+                console.table(department);
+                return addDepartment();
+            }
+            else if (response.questions === "Add a role") {
+                console.table(role);
+                return addRole();
+            }
+            else if (response.questions === "Add an employee") {
+                console.table(employees);
+                return addEmployees();
+            }
+            else if (response.questions === "Update an employee role") {
+                console.table(employees);
+                return updateEmployeeRole();
+            }
+            else console.log("You can exit if you're done")
+        })
+
+}
+async function addEmployees() {
+    await init()
+
+    const [employees] = await db.execute("select * from employee")
+
+    console.table(employees);
+
+    const { employee } = await prompt([{
+        type: 'list',
+        name: 'employee',
+        message: 'What employee do you want to talk to?',
+        choices: employees.map(employee => ({ name: employee.first_name + " " + employee.last_name, value: employee }))
+    }])
+
+    console.log(employee)
+
+
+    /// write next sql statements here! you would do some sort of sql query after this
+
+}
+
     // console.log(employee)
     // console.table(employees);
     // console.table(role);
@@ -74,8 +98,8 @@ async function awaitMySqlWithInquirer() {
 
     /// write next sql statements here! you would do some sort of sql query after this
 
-    })
-}
+
+
 
 
 
