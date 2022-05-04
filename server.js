@@ -134,8 +134,79 @@ db.execute(`INSERT INTO department (name)
             awaitMySqlWithInquirer()       
 }
 
+async function addRole() {
+    await init()
+
+    const [departments] = await db.execute("select * from department")
+    const [roles] = await db.execute("select * from employee_role");
 
 
+    console.table(roles);
+
+    const response = await prompt([
+        {
+        type: 'input',
+        name: 'newRole',
+        message: 'What is the departments new role?',
+        },
+        {
+        type: 'input',
+        name: 'salary',
+        message: 'How much is the salary?',
+        },
+        {
+        type: 'list',
+        name: 'chooseDepartment',
+        message: 'What department does it belong to?',
+        choices: departments.map(department => ({name: department.name, value: department}))
+        },
+])
+db.execute(`INSERT INTO employee_role (title, salary, department_id)
+            VALUES  ("${response.newRole}", "${response.salary}", ${response.chooseDepartment.id});`)
+            const [newRoleTable] = await db.execute("select * from employee_role")
+            console.log("New Role Added!! Yah!")
+            console.table(newRoleTable) 
+            awaitMySqlWithInquirer()       
+
+
+}
+
+async function updateEmployeeRole() {
+    await init()
+
+    const [departments] = await db.execute("select * from department")
+    const [roles] = await db.execute("select * from employee_role");
+
+
+    console.table(roles);
+
+    const response = await prompt([
+        {
+        type: 'input',
+        name: 'newRole',
+        message: 'What is the departments new role?',
+        },
+        {
+        type: 'input',
+        name: 'salary',
+        message: 'How much is the salary?',
+        },
+        {
+        type: 'list',
+        name: 'chooseDepartment',
+        message: 'What department does it belong to?',
+        choices: departments.map(department => ({name: department.name, value: department}))
+        },
+])
+db.execute(`INSERT INTO employee_role (title, salary, department_id)
+            VALUES  ("${response.newRole}", "${response.salary}", ${response.chooseDepartment.id});`)
+            const [newRoleTable] = await db.execute("select * from employee_role")
+            console.log("New Role Added!! Yah!")
+            console.table(newRoleTable) 
+            awaitMySqlWithInquirer()       
+
+
+}
 
 
     /// write next sql statements here! you would do some sort of sql query after this
