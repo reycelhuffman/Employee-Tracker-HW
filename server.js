@@ -1,3 +1,4 @@
+const { response } = require("express");
 const { prompt } = require("inquirer");
 const mysql = require('mysql2/promise');
 let db;
@@ -59,7 +60,7 @@ async function awaitMySqlWithInquirer() {
                 return addRole();
             }
             else if (response.questions === "Add an employee") {
-                console.table(employees);
+                // console.table(employees);
                 return addEmployees();
             }
             else if (response.questions === "Update an employee role") {
@@ -70,30 +71,50 @@ async function awaitMySqlWithInquirer() {
         })
 
 }
+
 async function addEmployees() {
     await init()
 
     const [employees] = await db.execute("select * from employee")
+    const [roles] = await db.execute("select * from employee_role");
+
 
     console.table(employees);
 
-    const { employee } = await prompt([{
+    const response = await prompt([
+        {
+        type: 'input',
+        name: 'first',
+        message: 'What is the employee first name?',
+        },
+        {
+        type: 'input',
+        name: 'last',
+        message: 'What is the employee last name?',
+        },
+        {
         type: 'list',
-        name: 'employee',
-        message: 'What employee do you want to talk to?',
-        choices: employees.map(employee => ({ name: employee.first_name + " " + employee.last_name, value: employee }))
-    }])
+        name: 'chooseRole',
+        message: 'What is the employee role?',
+        choices: roles.map(role=> ({name:role.id + ": "+ role.title, value: role}))
+        },
+        {
+            type: 'list',
+            name: 'manager',
+            message: 'Who is the employee manager?',
+            choices: employees.map(employee=> ({name:employee.first_name + " "+ employee.last_name, value: employee}))
+        },
+])
+db.execute(`INSERT INTO employee (first_name, last_name, role_id, manager_id)
+            VALUES  ("${response.first}", "${response.last}", ${response.chooseRole.id}, ${response.manager.id});`)
+            const [newEmployeesTable] = await db.execute("select * from employee")
+            console.log("New Employee Added!! Yah!")
+            console.table(newEmployeesTable) 
+            awaitMySqlWithInquirer()       
 
-    console.log(employee)
-
-
-    /// write next sql statements here! you would do some sort of sql query after this
 
 }
 
-    // console.log(employee)
-    // console.table(employees);
-    // console.table(role);
 
 
     /// write next sql statements here! you would do some sort of sql query after this
