@@ -174,7 +174,7 @@ db.execute(`INSERT INTO employee_role (title, salary, department_id)
 async function updateEmployeeRole() {
     await init()
 
-    const [departments] = await db.execute("select * from department")
+    const [employees] = await db.execute("select * from employee")
     const [roles] = await db.execute("select * from employee_role");
 
 
@@ -182,53 +182,27 @@ async function updateEmployeeRole() {
 
     const response = await prompt([
         {
-        type: 'input',
-        name: 'newRole',
-        message: 'What is the departments new role?',
-        },
-        {
-        type: 'input',
-        name: 'salary',
-        message: 'How much is the salary?',
+        type: 'list',
+        name: 'updateEmployee',
+        message: 'Which employee would you like to update?',
+        choices: employees.map(employee=> ({name:employee.first_name + " "+ employee.last_name, value: employee}))
         },
         {
         type: 'list',
-        name: 'chooseDepartment',
-        message: 'What department does it belong to?',
-        choices: departments.map(department => ({name: department.name, value: department}))
+        name: 'updateRole',
+        message: 'what role would you like to update the employee to?',
+        choices: roles.map(role=> ({name:role.id + ": "+ role.title, value: role}))
         },
 ])
-db.execute(`INSERT INTO employee_role (title, salary, department_id)
-            VALUES  ("${response.newRole}", "${response.salary}", ${response.chooseDepartment.id});`)
-            const [newRoleTable] = await db.execute("select * from employee_role")
-            console.log("New Role Added!! Yah!")
-            console.table(newRoleTable) 
+db.execute( `UPDATE employee SET role_id =${response.updateRole.id} WHERE id = ${response.updateEmployee.id}`)
+            console.log("________________________________________________________________")
+            console.log("|                     Old Employee Table                       |")
+            console.table(employees)
+            const [updateEmployeeRoleTable] = await db.execute("select * from employee")
+            console.log("Updated Employee Role Yay!") 
+            console.log("|                    Updated Employee Table                    |")
+            console.table(updateEmployeeRoleTable)
             awaitMySqlWithInquirer()       
-
 
 }
 
-
-    /// write next sql statements here! you would do some sort of sql query after this
-
-
-
-
-
-
-
-// async function awaitWithInquirerByItself() {
-
-
-//     const { size } = await prompt([{
-//         type: 'list',
-//         name: 'size',
-//         message: 'What size do you need?',
-//         choices: ['Jumbo', 'Large', 'Standard', 'Medium', 'Small', 'Micro']
-//     }])
-
-//     console.log(size);
-
-// }
-
-// employees.map(employee => ({ name: employee.first_name + " " + employee.last_name, value: employee }))
